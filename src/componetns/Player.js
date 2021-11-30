@@ -1,4 +1,4 @@
-import React,{useRef,useState} from 'react'
+import React,{useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay,
         faAngleLeft,
@@ -11,12 +11,11 @@ export default function Player(props) {
         setIsPlaying,
         isPlaying,
         currentSong,
+        audioRef,
+        songInfo,
+    setSongInfo,
     } = props;
 
-    const [songInfo,setSongInfo] = useState({
-        currentTime:0,
-        duration:0
-    });
     
     function formatMinutes(time) 
     {
@@ -31,7 +30,6 @@ export default function Player(props) {
         setSongInfo({...songInfo,currentTime: currentTime,duration});
     }
     
-    const audioRef = useRef(songInfo.currentTime);
     const handlePlay = () =>
     { 
         console.log(isPlaying)
@@ -70,7 +68,7 @@ export default function Player(props) {
                 <input 
                     type="range" 
                     min = {0}
-                    max = {songInfo.duration}
+                    max = {songInfo.duration || 0}
                     value = {songInfo.currentTime}
                     onChange = {dragHandler}
                 />
@@ -100,7 +98,6 @@ export default function Player(props) {
             <audio 
                 ref={audioRef} 
                 src={currentSong.audio}
-                
                 onLoadedMetadata= {onTimeUpdateHandler}
                 onTimeUpdate= {onTimeUpdateHandler}
             />
